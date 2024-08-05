@@ -2,6 +2,7 @@ M = int(input())
 N = int(input())
 lst = []
 for num in range(M, N+1):
+    is_prime = False # is_prime 선언
     if num > 1:
         is_prime = True
         for i in range(2, int(num**0.5) + 1):
