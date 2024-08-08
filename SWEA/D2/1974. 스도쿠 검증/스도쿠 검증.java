@@ -26,46 +26,49 @@ public class Solution {
 			int answer = 1;
 			// Set으로 중복 거르고 그 라인 길이랑 비교했을 때 달라지면 중복 값 있다는 뜻
 			Set<Integer> set = new HashSet<>();
-
-			// 가로 중복 검사
-			for (int i = 0; i < 9; i++) {
-				for (int j = 0; j < 9; j++) {
-					set.add(matrix[i][j]);
-				}
-				if (set.size() != matrix[i].length) {
-					answer = 0;
-					break;
-				}
-				set.clear();
-			}
-
-			// 세로 중복 검사
-			for (int j = 0; j < 9; j++) {
+			
+			// label을 설정해서 중복이 발생하면 바로 탈출
+			outer:{
+				// 가로 중복 검사
 				for (int i = 0; i < 9; i++) {
-					set.add(matrix[i][j]);
-				}
-				if (set.size() != matrix[j].length) {
-					answer = 0;
-					break;
-				}
-				set.clear();
-			}
-
-			// 3*3 중복 검사
-			for(int r = 0; r < 7; r = r+3) {
-				for(int c = 0; c<7; c = c +3) {
-					for(int i = 0; i < 3; i++) {
-						for(int j = 0; j < 3; j ++) {
-							set.add(matrix[r+i][c+j]);
-						}
+					for (int j = 0; j < 9; j++) {
+						set.add(matrix[i][j]);
 					}
-					if(set.size() != 9) {
+					if (set.size() != matrix[i].length) {
 						answer = 0;
-						break;
+						break outer;
 					}
 					set.clear();
-				}//c
-			}//r
+				}
+				
+				// 세로 중복 검사
+				for (int j = 0; j < 9; j++) {
+					for (int i = 0; i < 9; i++) {
+						set.add(matrix[i][j]);
+					}
+					if (set.size() != matrix[j].length) {
+						answer = 0;
+						break outer;
+					}
+					set.clear();
+				}
+				
+				// 3*3 중복 검사
+				for(int r = 0; r < 7; r = r+3) {
+					for(int c = 0; c<7; c = c +3) {
+						for(int i = 0; i < 3; i++) {
+							for(int j = 0; j < 3; j ++) {
+								set.add(matrix[r+i][c+j]);
+							}
+						}
+						if(set.size() != 9) {
+							answer = 0;
+							break outer;
+						}
+						set.clear();
+					}//c
+				}//r
+			}
 
 			System.out.printf("#%d %d\n", tc, answer);
 
