@@ -22,7 +22,7 @@ class Solution {
 		}
 
 		// arr 정렬
-		Collections.sort(arr);
+		// Collections.sort(arr);
 
 		// ArrayList -> Array
 		int[] answer = new int[arr.size()];
