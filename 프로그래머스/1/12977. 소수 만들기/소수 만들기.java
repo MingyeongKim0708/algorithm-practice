@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 class Solution {
 	static int[] sel;
 	static int answer;
@@ -29,10 +31,12 @@ class Solution {
 		}
 
 		// 재귀 부분
-		for (int i = idx; i < nums.length; i++) {
+		for (int i = idx; i <= nums.length - sel.length +sidx; i++) {
 			sel[sidx] = nums[i];
 			combination(nums, i + 1, sidx + 1);
+//			System.out.println("검사용 " + Arrays.toString(sel));
 		}
+//		System.out.println("검사용2 " + Arrays.toString(sel));
 
 	}
 
