@@ -19,7 +19,7 @@ public class Main {
 	static boolean[] visit; // 방문체크
 	static int answer = -1; // 감염된 컴퓨터 수. 1은 체크하지 않으므로 -1부터 시작
 
-	// BFS
+	// DFS로 푸는 경우
 
 	public static void main(String[] args) throws Exception {
 
@@ -49,27 +49,18 @@ public class Main {
 		}
 
 		visit = new boolean[N + 1];
-		bfs(1);
+		dfs(1);
 		bw.write(answer + "");
 		bw.flush();
 		bw.close();
 	} // main
 
-	private static void bfs(int v) {
-
-		Queue<Integer> q = new LinkedList<>();
-		q.add(v);
+	private static void dfs(int v) {
 		visit[v] = true;
-
-		while (!q.isEmpty()) {
-			int curr = q.poll();
-			answer++;
-			for (int w : adj[curr]) {
-				if (!visit[w]) {
-					q.add(w);
-					visit[w] = true;
-				}
-			}
+		answer++;
+		for (int w : adj[v]) {
+			if (!visit[w])
+				dfs(w);
 		}
 
 	}
