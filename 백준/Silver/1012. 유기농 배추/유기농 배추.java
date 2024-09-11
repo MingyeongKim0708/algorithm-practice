@@ -38,12 +38,15 @@ public class Main {
 
 			answer = 0;
 
-			// 이미 방문한 것은 bfs를 시작할 필요가 없도록 방문 체크
+			// 이미 방문한 것은 dfs를 시작할 필요가 없도록 방문 체크
 			visit = new boolean[N][M];
 
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < M; j++) {
-					bfs(i, j);
+					if (farm[i][j] == 1 && !visit[i][j]) {
+						dfs(i, j);
+						answer++; // dfs가 끝난 후 지렁이 수 +1
+					}
 				}
 			}
 
@@ -56,35 +59,19 @@ public class Main {
 	static int[] dr = { 1, 0, -1, 0 };
 	static int[] dc = { 0, 1, 0, -1 };
 
-	private static void bfs(int r, int c) {
+	private static void dfs(int r, int c) {
 		if (farm[r][c] == 0 || visit[r][c])
 			return;
 
-		Queue<int[]> q = new LinkedList<>();
-		q.add(new int[] { r, c });
 		visit[r][c] = true;
+		for (int i = 0; i < 4; i++) {
+			int nr = r + dr[i];
+			int nc = c + dc[i];
 
-		while (!q.isEmpty()) {
-			int curr[] = q.poll();
-			int nowR = curr[0];
-			int nowC = curr[1];
-
-			for (int i = 0; i < 4; i++) {
-				int nr = nowR + dr[i];
-				int nc = nowC + dc[i];
-
-				if (nr >= 0 && nr < N && nc >= 0 && nc < M && !visit[nr][nc] && farm[nr][nc] == 1) {
-					q.add(new int[] { nr, nc });
-					visit[nr][nc] = true;
-				}
-
+			if (nr >= 0 && nr < N && nc >= 0 && nc < M && !visit[nr][nc] && farm[nr][nc] == 1) {
+				dfs(nr, nc);
 			}
-
 		}
-
-		// r,c에서 출발한 1들을 모두 찾으면 지렁이 수 +1
-		answer++;
-
 	}
 
 }
