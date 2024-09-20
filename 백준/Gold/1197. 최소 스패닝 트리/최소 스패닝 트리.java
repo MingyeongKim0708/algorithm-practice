@@ -2,18 +2,21 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-// MST - 크루스칼
+// MST - 프림 - 우선순위큐(완전 이진 트리. Heap)
 public class Main {
 
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
 	static int V, E;
-	static Edge[] edge;
-	static int[] p;
+	static boolean[] visit; // 방문체크
+	static List<Edge>[] adjList; // 인접리스트
 
 	static class Edge implements Comparable<Edge> {
 		int A, B, C;
@@ -27,7 +30,7 @@ public class Main {
 
 		@Override
 		public int compareTo(Edge o) {
-			return this.C - o.C;
+			return Integer.compare(this.C, o.C);
 		}
 
 	}
@@ -36,38 +39,41 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		V = Integer.parseInt(st.nextToken());
 		E = Integer.parseInt(st.nextToken());
-		edge = new Edge[E];
+		adjList = new ArrayList[V + 1];
+		for (int i = 0; i < V + 1; i++) {
+			adjList[i] = new ArrayList<>();
+		}
+
 		for (int i = 0; i < E; i++) {
 			st = new StringTokenizer(br.readLine());
 			int x = Integer.parseInt(st.nextToken());
 			int y = Integer.parseInt(st.nextToken());
 			int z = Integer.parseInt(st.nextToken());
 
-			edge[i] = new Edge(x, y, z);
-		}
-		Arrays.sort(edge);
+			adjList[x].add(new Edge(x, y, z));
+			adjList[y].add(new Edge(y, x, z));
 
-		p = new int[V + 1];
-		for (int i = 1; i <= V; i++) {
-			p[i] = i;
 		}
+
+		visit = new boolean[V + 1];
+		visit[1] = true; // 노드가 1번부터 시작
+
+		PriorityQueue<Edge> pq = new PriorityQueue<>();
+		pq.addAll(adjList[1]);
 
 		int ans = 0;
-		int pick = 0;
+		int pick = 1; // 1번 뽑은 상태
 
-		for (int i = 0; i < E; i++) {
+		while (pick != V) {
+			Edge e = pq.poll();
+			if (visit[e.B])
+				continue;
 
-			int px = findSet(edge[i].A);
-			int py = findSet(edge[i].B);
+			ans += e.C;
+			visit[e.B] = true;
+			pick++;
 
-			if (px != py) {
-				union(px, py);
-				ans += edge[i].C;
-				pick++;
-			}
-
-			if (pick == V - 1)
-				break;
+			pq.addAll(adjList[e.B]);
 		}
 
 		bw.write(ans + "");
@@ -76,13 +82,4 @@ public class Main {
 
 	}
 
-	private static void union(int px, int py) {
-		p[py] = p[px];
-	}
-
-	private static int findSet(int x) {
-		if (p[x] == x)
-			return x;
-		return p[x] = findSet(p[x]);
-	}
 }
