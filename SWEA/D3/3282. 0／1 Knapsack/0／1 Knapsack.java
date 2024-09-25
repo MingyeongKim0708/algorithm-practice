@@ -1,36 +1,52 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
 
 public class Solution {
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		int T = sc.nextInt();
+
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+	public static void main(String[] args) throws Exception {
+		int T = Integer.parseInt(br.readLine());
 
 		for (int tc = 1; tc <= T; tc++) {
 
-			int N = sc.nextInt();
-			int K = sc.nextInt();
-			int[][] items = new int[N][2];
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			int N = Integer.parseInt(st.nextToken()); // 물건의 개수
+			int K = Integer.parseInt(st.nextToken()); // 가방의 부피
 
+			// 각 물건별 부피, 가치 넣기
+			int[][] item = new int[N + 1][2];
 			for (int i = 0; i < N; i++) {
-				items[i][0] = sc.nextInt(); // 부피 v
-				items[i][1] = sc.nextInt(); // 가치 c
+				st = new StringTokenizer(br.readLine());
+				item[i][0] = Integer.parseInt(st.nextToken()); // 부피
+				item[i][1] = Integer.parseInt(st.nextToken()); // 가치
 			}
 
-			int[][] dp = new int[N + 1][K + 1];
-
+			// DP
+			int dp[][] = new int[N + 1][K + 1];
 			for (int i = 0; i < N; i++) {
-				int volume = items[i][0];
-				int cost = items[i][1];
+				int volume = item[i][0];
+				int cost = item[i][1];
+
+				// 이전에 구한 최적해 vs 갱신하는 값
 				for (int v = 0; v <= K; v++) {
-					// 이전 단계의 최적해를 가져온 것과 새로 갱신하는 것을 비교한다
 					dp[i + 1][v] = dp[i][v];
-					if (v - volume >= 0)
+					if (v >= volume) {
 						dp[i + 1][v] = Math.max(dp[i][v], dp[i][v - volume] + cost);
+					}
 				}
 			}
-			System.out.println("#" + tc + " " + dp[N][K]);
+			
+			bw.write("#" + tc + " " + dp[N][K] + "\n");
+
 		} // tc
 
-	}
+		bw.flush();
+		bw.close();
+	}// main
 
 }
