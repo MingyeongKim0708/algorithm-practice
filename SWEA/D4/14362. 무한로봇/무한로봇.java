@@ -8,12 +8,10 @@
 	public class Solution {
 	
 		static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		static StringBuilder sb;
 	
 		static int T;
 		static char[] order;
-		static int max;
 	
 		// dir : 0 상, 1 우, 2 하, 3 좌
 		static int[] dr = { 1, 0, -1, 0 };
@@ -27,20 +25,6 @@
 				sb.append("#").append(tc).append(" ");
 	
 				order = br.readLine().toCharArray();
-	
-				int len = order.length;
-				int s = 0, l = 0, r = 0; // 각 명령의 수
-	
-				for (int i = 0; i < len; i++) {
-					if (order[i] == 'S') {
-						s++;
-					} else if (order[i] == 'L') {
-						l++;
-					} else if (order[i] == 'R') {
-						r++;
-					}
-				}
-	
 
 				// 최대거리 계산
 				int maxDistance = getMaxDistance(order);
